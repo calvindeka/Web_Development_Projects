@@ -1,37 +1,417 @@
-<!-- TODO 1: Create the HTML Boilerplate -->
-
-<!-- TODO 2: Add Your previous projects' HTML into the public folder -->
-
-<!-- TODO 3: Take screenshots of your project previews and add the images to the images folder -->
-
-<!-- TODO 4: Add titles/subtitles etc. -->
-
-<!-- TODO 5: Add a link to the project pages -->
-
-<!-- TODO 6: Add images to show the project previews
-HINT for TODO 6: You can use the height attribute set to 200 to make the image smaller:
-https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-height -->
-
-<!-- TODO 7: Add the Contact Me and About Me page links -->
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <title>Angela's Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calvin Deka - Web Developer Portfolio. Crafting beautiful, functional websites with passion and precision.">
+  <title>Calvin Deka | Web Developer</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <h1>Calvin's Portfolio</h1>
-  <h2>I'm a Web Developer</h2>
-  <hr />
-  <h3><a href="./public/movie-ranking.html">Movie Ranking Project</a></h3>
-  <img src="./assets/images/movie-ranking.png" height="200" alt="movie ranking project preview"/>
-  <h3><a href="./public/birthday-invite.html">Birthday Invite Project</a></h3>
-  <img src="./assets/images/birthday-invite.png" height="200" alt="birthday invite project preview"/>
-  <hr />
-  <a href="./public/about.html">About Me</a>
-  <a href="./public/contact.html">Contact Me</a>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">Calvin<span class="accent">.</span></a>
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#contact" class="nav-link nav-cta">Let's Talk</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <p class="hero-greeting">Hello, I'm</p>
+        <h1 class="hero-title">Calvin Deka</h1>
+        <h2 class="hero-subtitle">Web Developer <span class="accent">&</span> Creative Problem Solver</h2>
+        <p class="hero-description">
+          I craft beautiful, functional websites that help businesses grow and connect with their audience. 
+          Let's turn your vision into reality.
+        </p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">View My Work</a>
+          <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number">2+</span>
+            <span class="stat-label">Projects Completed</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Client Satisfaction</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">Learning Mindset</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-image-wrapper">
+          <div class="hero-image-bg"></div>
+          <div class="hero-image-placeholder">
+            <span class="initials">CD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll to explore</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">About Me</span>
+        <h2 class="section-title">Passionate About Creating <br><span class="accent">Digital Experiences</span></h2>
+      </div>
+      <div class="about-content">
+        <div class="about-text">
+          <p class="about-lead">
+            I'm a dedicated web developer with a passion for creating clean, efficient, and user-friendly websites.
+          </p>
+          <p>
+            My journey in web development started with a curiosity about how things work on the internet. 
+            That curiosity has evolved into a deep passion for crafting digital experiences that not only look 
+            great but also solve real problems for users.
+          </p>
+          <p>
+            I believe that great design is invisible – it guides users naturally, making complex interactions 
+            feel effortless. Every line of code I write is with the end-user in mind.
+          </p>
+          <div class="about-highlights">
+            <div class="highlight">
+              <div class="highlight-icon">🎯</div>
+              <div class="highlight-text">
+                <h4>Detail-Oriented</h4>
+                <p>Every pixel matters in creating polished experiences</p>
+              </div>
+            </div>
+            <div class="highlight">
+              <div class="highlight-icon">💡</div>
+              <div class="highlight-text">
+                <h4>Creative Thinker</h4>
+                <p>Finding innovative solutions to complex problems</p>
+              </div>
+            </div>
+            <div class="highlight">
+              <div class="highlight-icon">🚀</div>
+              <div class="highlight-text">
+                <h4>Growth Mindset</h4>
+                <p>Constantly learning and improving my craft</p>
+              </div>
+            </div>
+          </div>
+          <a href="./public/about.html" class="btn btn-outline">Learn More About Me</a>
+        </div>
+        <div class="about-visual">
+          <div class="code-window">
+            <div class="code-header">
+              <span class="code-dot red"></span>
+              <span class="code-dot yellow"></span>
+              <span class="code-dot green"></span>
+              <span class="code-filename">developer.js</span>
+            </div>
+            <div class="code-body">
+              <pre>
+<span class="code-keyword">const</span> <span class="code-variable">developer</span> = {
+  <span class="code-property">name</span>: <span class="code-string">"Calvin Deka"</span>,
+  <span class="code-property">role</span>: <span class="code-string">"Web Developer"</span>,
+  <span class="code-property">skills</span>: [
+    <span class="code-string">"HTML"</span>, 
+    <span class="code-string">"CSS"</span>, 
+    <span class="code-string">"Design"</span>
+  ],
+  <span class="code-property">passion</span>: <span class="code-string">"Creating amazing UX"</span>,
+  <span class="code-property">available</span>: <span class="code-boolean">true</span>
+};
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="projects">
+    <div class="container">
+      <div class="section-header centered">
+        <span class="section-tag">My Work</span>
+        <h2 class="section-title">Featured <span class="accent">Projects</span></h2>
+        <p class="section-description">
+          A collection of my recent work. Each project is a unique piece of development, 
+          designed to meet specific goals and user needs.
+        </p>
+      </div>
+      <div class="projects-grid">
+        <article class="project-card featured">
+          <div class="project-image">
+            <img src="./assets/images/movie-ranking.png" alt="Movie Ranking Project Preview">
+            <div class="project-overlay">
+              <a href="./public/movie-ranking.html" class="project-link">View Project</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">Lists</span>
+              <span class="tag">Semantic</span>
+            </div>
+            <h3 class="project-title">Movie Ranking</h3>
+            <p class="project-description">
+              A clean, organized showcase of my favorite films with custom rankings and descriptions. 
+              Built with semantic HTML for optimal accessibility.
+            </p>
+            <a href="./public/movie-ranking.html" class="project-arrow">
+              <span>Explore Project</span>
+              <span class="arrow">→</span>
+            </a>
+          </div>
+        </article>
+        
+        <article class="project-card">
+          <div class="project-image">
+            <img src="./assets/images/birthday-invite.png" alt="Birthday Invite Project Preview">
+            <div class="project-overlay">
+              <a href="./public/birthday-invite.html" class="project-link">View Project</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">Images</span>
+              <span class="tag">Layout</span>
+            </div>
+            <h3 class="project-title">Birthday Invitation</h3>
+            <p class="project-description">
+              A fun and engaging birthday invitation page featuring creative design elements 
+              and a warm, welcoming layout.
+            </p>
+            <a href="./public/birthday-invite.html" class="project-arrow">
+              <span>Explore Project</span>
+              <span class="arrow">→</span>
+            </a>
+          </div>
+        </article>
+        
+        <article class="project-card coming-soon">
+          <div class="project-image placeholder">
+            <div class="coming-soon-content">
+              <span class="coming-soon-icon">🚀</span>
+              <span class="coming-soon-text">Coming Soon</span>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags">
+              <span class="tag">In Progress</span>
+            </div>
+            <h3 class="project-title">Next Project</h3>
+            <p class="project-description">
+              Exciting new project in development. Stay tuned for something amazing!
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="skills">
+    <div class="container">
+      <div class="section-header centered">
+        <span class="section-tag">Expertise</span>
+        <h2 class="section-title">Skills & <span class="accent">Technologies</span></h2>
+        <p class="section-description">
+          The tools and technologies I use to bring ideas to life.
+        </p>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-icon">
+            <span>🌐</span>
+          </div>
+          <h3 class="skill-name">HTML5</h3>
+          <p class="skill-description">Semantic markup & accessibility</p>
+          <div class="skill-level">
+            <div class="skill-bar" style="--skill-width: 90%"></div>
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon">
+            <span>🎨</span>
+          </div>
+          <h3 class="skill-name">CSS3</h3>
+          <p class="skill-description">Modern layouts & animations</p>
+          <div class="skill-level">
+            <div class="skill-bar" style="--skill-width: 85%"></div>
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon">
+            <span>📱</span>
+          </div>
+          <h3 class="skill-name">Responsive Design</h3>
+          <p class="skill-description">Mobile-first approach</p>
+          <div class="skill-level">
+            <div class="skill-bar" style="--skill-width: 80%"></div>
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon">
+            <span>⚡</span>
+          </div>
+          <h3 class="skill-name">Flexbox & Grid</h3>
+          <p class="skill-description">Advanced CSS layouts</p>
+          <div class="skill-level">
+            <div class="skill-bar" style="--skill-width: 75%"></div>
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon">
+            <span>🔧</span>
+          </div>
+          <h3 class="skill-name">Git & GitHub</h3>
+          <p class="skill-description">Version control</p>
+          <div class="skill-level">
+            <div class="skill-bar" style="--skill-width: 70%"></div>
+          </div>
+        </div>
+        
+        <div class="skill-card">
+          <div class="skill-icon">
+            <span>✨</span>
+          </div>
+          <h3 class="skill-name">UI/UX Principles</h3>
+          <p class="skill-description">User-centered design</p>
+          <div class="skill-level">
+            <div class="skill-bar" style="--skill-width: 75%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial/Quote Section -->
+  <section class="quote-section">
+    <div class="container">
+      <blockquote class="main-quote">
+        <span class="quote-mark">"</span>
+        <p>The details are not the details. They make the design.</p>
+        <cite>— Charles Eames</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <span class="section-tag">Get In Touch</span>
+          <h2 class="section-title">Let's Work <br><span class="accent">Together</span></h2>
+          <p class="contact-description">
+            Have a project in mind? I'd love to hear about it. Let's collaborate and create 
+            something amazing together.
+          </p>
+          <div class="contact-details">
+            <div class="contact-item">
+              <span class="contact-icon">📧</span>
+              <div>
+                <h4>Email</h4>
+                <p>hello@calvindeka.com</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">📍</span>
+              <div>
+                <h4>Location</h4>
+                <p>Available Worldwide</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">💼</span>
+              <div>
+                <h4>Status</h4>
+                <p class="status-available">Open for opportunities</p>
+              </div>
+            </div>
+          </div>
+          <div class="social-links">
+            <a href="#" class="social-link" title="GitHub">
+              <span>GitHub</span>
+            </a>
+            <a href="#" class="social-link" title="LinkedIn">
+              <span>LinkedIn</span>
+            </a>
+            <a href="#" class="social-link" title="Twitter">
+              <span>Twitter</span>
+            </a>
+          </div>
+        </div>
+        <div class="contact-cta">
+          <div class="cta-card">
+            <h3>Ready to start your project?</h3>
+            <p>Let's discuss how I can help bring your vision to life.</p>
+            <a href="./public/contact.html" class="btn btn-primary btn-large">Send a Message</a>
+            <p class="cta-note">I typically respond within 24 hours</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="#" class="footer-logo">Calvin<span class="accent">.</span></a>
+          <p>Building the web, one pixel at a time.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h4>Navigation</h4>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#projects">Projects</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4>More</h4>
+            <ul>
+              <li><a href="./public/about.html">About Me</a></li>
+              <li><a href="./public/contact.html">Contact Me</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Calvin Deka. All rights reserved.</p>
+        <p>Crafted with ❤️ and lots of ☕</p>
+      </div>
+    </div>
+  </footer>
 </body>
 
 </html>
