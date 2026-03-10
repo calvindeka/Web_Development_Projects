@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice Game | Roll to Win!</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="game-container">
+    <!-- Header -->
+    <header class="game-header">
+      <h1>🎲 Dice Game</h1>
+      <p class="tagline">Roll the dice and test your luck!</p>
+    </header>
+
+    <!-- Game Mode Selection -->
+    <div class="mode-selection" id="modeSelection">
+      <h2>Choose Game Mode</h2>
+      <div class="mode-buttons">
+        <button class="mode-btn" onclick="startGame('pvp')">
+          <span class="mode-icon">👥</span>
+          <span class="mode-title">Player vs Player</span>
+          <span class="mode-desc">Challenge a friend</span>
+        </button>
+        <button class="mode-btn" onclick="startGame('pvc')">
+          <span class="mode-icon">🤖</span>
+          <span class="mode-title">Player vs Computer</span>
+          <span class="mode-desc">Test your luck against AI</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Game Area -->
+    <main class="game-area" id="gameArea">
+      <!-- Player 1 -->
+      <div class="player-section player-1" id="player1Section">
+        <div class="player-header">
+          <h2 class="player-name" id="player1Name">Player 1</h2>
+          <div class="player-score">
+            <span class="score-label">Score</span>
+            <span class="score-value" id="player1Score">0</span>
+          </div>
+        </div>
+        <div class="dice-container">
+          <div class="dice" id="dice1">
+            <div class="dice-face">?</div>
+          </div>
+        </div>
+        <div class="current-score">
+          <span class="current-label">Current Roll</span>
+          <span class="current-value" id="current1">-</span>
+        </div>
+      </div>
+
+      <!-- VS Divider -->
+      <div class="vs-divider">
+        <span>VS</span>
+      </div>
+
+      <!-- Player 2 -->
+      <div class="player-section player-2" id="player2Section">
+        <div class="player-header">
+          <h2 class="player-name" id="player2Name">Player 2</h2>
+          <div class="player-score">
+            <span class="score-label">Score</span>
+            <span class="score-value" id="player2Score">0</span>
+          </div>
+        </div>
+        <div class="dice-container">
+          <div class="dice" id="dice2">
+            <div class="dice-face">?</div>
+          </div>
+        </div>
+        <div class="current-score">
+          <span class="current-label">Current Roll</span>
+          <span class="current-value" id="current2">-</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Game Controls -->
+    <div class="game-controls" id="gameControls">
+      <div class="turn-indicator" id="turnIndicator">
+        <span id="turnText">Player 1's Turn</span>
+      </div>
+      <div class="control-buttons">
+        <button class="btn btn-roll" id="rollBtn" onclick="rollDice()">
+          <span class="btn-icon">🎲</span>
+          Roll Dice
+        </button>
+        <button class="btn btn-hold" id="holdBtn" onclick="holdScore()">
+          <span class="btn-icon">✋</span>
+          Hold
+        </button>
+      </div>
+      <button class="btn btn-new-game" onclick="resetGame()">
+        <span class="btn-icon">🔄</span>
+        New Game
+      </button>
+    </div>
+
+    <!-- Winner Modal -->
+    <div class="modal-overlay" id="winnerModal">
+      <div class="modal">
+        <div class="winner-content">
+          <div class="trophy">🏆</div>
+          <h2 id="winnerText">Player 1 Wins!</h2>
+          <p class="final-score" id="finalScore">Final Score: 100</p>
+          <div class="modal-buttons">
+            <button class="btn btn-play-again" onclick="resetGame()">Play Again</button>
+            <button class="btn btn-change-mode" onclick="changeMode()">Change Mode</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Rules -->
+    <div class="rules-section">
+      <button class="rules-toggle" onclick="toggleRules()">
+        <span>📜</span> How to Play
+      </button>
+      <div class="rules-content" id="rulesContent">
+        <h3>Game Rules</h3>
+        <ul>
+          <li>🎯 <strong>Goal:</strong> Be the first to reach <span class="highlight">100 points</span></li>
+          <li>🎲 <strong>Roll:</strong> Roll the dice to accumulate points</li>
+          <li>⚠️ <strong>Risk:</strong> If you roll a <span class="highlight">1</span>, you lose your current turn points!</li>
+          <li>✋ <strong>Hold:</strong> Save your current points and pass the turn</li>
+          <li>🏆 <strong>Win:</strong> First player to reach 100 points wins!</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+      <p>Made with ❤️ by Calvin Deka</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
