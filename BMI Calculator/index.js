@@ -3,7 +3,15 @@
 
 function bmiCalculator(weight, height) {
     var bmi = weight / (height * height);
-    return Math.round(bmi);
+    var roundedBMI = Math.round(bmi);
+    
+    if (bmi < 18.5) {
+        return "Your BMI is " + roundedBMI + ", so you are underweight.";
+    } else if (bmi >= 18.5 && bmi <= 24.9) {
+        return "Your BMI is " + roundedBMI + ", so you have a normal weight.";
+    } else {
+        return "Your BMI is " + roundedBMI + ", so you are overweight.";
+    }
 }
 
 /* If my weight is 65Kg and my height is 1.8m, I should be able to call your function like this:
