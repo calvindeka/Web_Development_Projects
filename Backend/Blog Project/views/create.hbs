@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">+</span>
+                <span class="logo-text">Faithful Word</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/posts/new" class="btn-write">Write</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="form-section">
+            <h1 class="form-title">Write New Post</h1>
+            <p class="form-subtitle">Share a word of encouragement, reflection, or teaching.</p>
+
+            <form action="/posts" method="POST" class="post-form">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required placeholder="Enter your post title">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" name="author" required placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="Faith">Faith</option>
+                            <option value="Theology">Theology</option>
+                            <option value="Spiritual Growth">Spiritual Growth</option>
+                            <option value="Christian Living">Christian Living</option>
+                            <option value="Prayer">Prayer</option>
+                            <option value="Scripture Study">Scripture Study</option>
+                            <option value="Testimony">Testimony</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="excerpt">Excerpt</label>
+                    <textarea id="excerpt" name="excerpt" rows="2" required placeholder="A brief summary of your post (shown on the home page)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" rows="15" required placeholder="Write your post content here. Use double line breaks to separate paragraphs."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/" class="btn btn-cancel">Cancel</a>
+                    <button type="submit" class="btn btn-submit">Publish Post</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">+</span>
+                <span class="logo-text">Faithful Word</span>
+            </div>
+            <p class="footer-copyright">Built with faith.</p>
+        </div>
+    </footer>
+</body>
+</html>

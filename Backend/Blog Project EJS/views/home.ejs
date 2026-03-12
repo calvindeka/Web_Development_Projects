@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Faithful Word - Strengthening faith through Scripture-centered reflection and teaching.">
+    <title><%= pageTitle %></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <!-- Hero Section with Scripture -->
+        <section class="hero">
+            <div class="hero-inner">
+                <p class="hero-scripture">"Your word is a lamp to my feet and a light to my path."</p>
+                <p class="hero-reference">Psalm 119:105</p>
+            </div>
+        </section>
+
+        <!-- Featured Post -->
+        <% if (featuredPost) { %>
+        <section class="featured-section">
+            <div class="container">
+                <article class="featured-post">
+                    <div class="featured-label">Featured</div>
+                    <div class="featured-content">
+                        <span class="post-category"><%= featuredPost.category %></span>
+                        <h2 class="featured-title">
+                            <a href="/posts/<%= featuredPost.id %>"><%= featuredPost.title %></a>
+                        </h2>
+                        <p class="featured-excerpt"><%= featuredPost.excerpt %></p>
+                        <div class="post-meta">
+                            <span class="post-author"><%= featuredPost.author %></span>
+                            <span class="meta-divider"></span>
+                            <span class="post-date"><%= featuredPost.date %></span>
+                            <span class="meta-divider"></span>
+                            <span class="post-read-time"><%= featuredPost.readTime %> min read</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <% } %>
+
+        <!-- Recent Posts -->
+        <section class="posts-section">
+            <div class="container">
+                <h2 class="section-heading">Recent Reflections</h2>
+                
+                <div class="posts-grid">
+                    <% recentPosts.forEach(post => { %>
+                    <article class="post-card">
+                        <span class="post-category"><%= post.category %></span>
+                        <h3 class="post-title">
+                            <a href="/posts/<%= post.id %>"><%= post.title %></a>
+                        </h3>
+                        <p class="post-excerpt"><%= post.excerpt %></p>
+                        <div class="post-meta">
+                            <span class="post-author"><%= post.author %></span>
+                            <span class="meta-divider"></span>
+                            <span class="post-read-time"><%= post.readTime %> min read</span>
+                        </div>
+                    </article>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scripture Banner -->
+        <section class="scripture-banner">
+            <div class="container">
+                <blockquote>
+                    <p>"But grow in the grace and knowledge of our Lord and Savior Jesus Christ. To him be the glory both now and to the day of eternity. Amen."</p>
+                    <cite>2 Peter 3:18</cite>
+                </blockquote>
+            </div>
+        </section>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

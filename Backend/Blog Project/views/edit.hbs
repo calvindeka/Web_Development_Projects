@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">+</span>
+                <span class="logo-text">Faithful Word</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/posts/new" class="btn-write">Write</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="form-section">
+            <h1 class="form-title">Edit Post</h1>
+            <p class="form-subtitle">Update your reflection or teaching.</p>
+
+            <form action="/posts/{{post.id}}?_method=PUT" method="POST" class="post-form">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required value="{{post.title}}">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" name="author" required value="{{post.author}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="Faith" {{#if (eq post.category "Faith")}}selected{{/if}}>Faith</option>
+                            <option value="Theology" {{#if (eq post.category "Theology")}}selected{{/if}}>Theology</option>
+                            <option value="Spiritual Growth" {{#if (eq post.category "Spiritual Growth")}}selected{{/if}}>Spiritual Growth</option>
+                            <option value="Christian Living" {{#if (eq post.category "Christian Living")}}selected{{/if}}>Christian Living</option>
+                            <option value="Prayer" {{#if (eq post.category "Prayer")}}selected{{/if}}>Prayer</option>
+                            <option value="Scripture Study" {{#if (eq post.category "Scripture Study")}}selected{{/if}}>Scripture Study</option>
+                            <option value="Testimony" {{#if (eq post.category "Testimony")}}selected{{/if}}>Testimony</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="excerpt">Excerpt</label>
+                    <textarea id="excerpt" name="excerpt" rows="2" required>{{post.excerpt}}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" rows="15" required>{{post.content}}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/posts/{{post.id}}" class="btn btn-cancel">Cancel</a>
+                    <button type="submit" class="btn btn-submit">Update Post</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">+</span>
+                <span class="logo-text">Faithful Word</span>
+            </div>
+            <p class="footer-copyright">Built with faith.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Handle category selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('category');
+            const currentCategory = '{{post.category}}';
+            for (let option of select.options) {
+                if (option.value === currentCategory) {
+                    option.selected = true;
+                    break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
