@@ -15,4 +15,4 @@ function whosPaying(names) {
 }
 
 // Test the function
-console.log(whosPaying(["Angela", "Ben", "Jenny", "Michael", "Chloe"]));
+console.log(whosPaying(["Calvin", "Ben", "Jenny", "Michael", "Chloe"]));
