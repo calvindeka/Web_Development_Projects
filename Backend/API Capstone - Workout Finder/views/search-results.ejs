@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results | Workout Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">💪</span>
+                <span class="logo-text">Workout Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/muscles">Muscles</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/equipment">Equipment</a></li>
+                <li><a href="/random" class="nav-cta">Random Workout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <div class="page-header">
+            <a href="/" class="back-link">← Back to Home</a>
+            <h1>Search Results</h1>
+            <p>Results for "<%= query %>"</p>
+        </div>
+
+        <!-- Search Again -->
+        <div class="search-section search-inline">
+            <form action="/search" method="GET" class="search-form">
+                <input type="text" name="q" value="<%= query %>" placeholder="Search exercises..." required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Go Home</a>
+            </div>
+        <% } else if (exercises && exercises.length > 0) { %>
+            <p class="results-count">Found <%= exercises.length %> exercises</p>
+            <div class="exercises-grid">
+                <% exercises.forEach(exercise => { %>
+                    <a href="/exercise/<%= exercise.id %>" class="exercise-card">
+                        <% if (exercise.image) { %>
+                            <div class="exercise-image">
+                                <img src="<%= exercise.image %>" alt="<%= exercise.name %>" loading="lazy">
+                            </div>
+                        <% } else { %>
+                            <div class="exercise-image no-image">
+                                <span>🏋️</span>
+                            </div>
+                        <% } %>
+                        <div class="exercise-info">
+                            <h3><%= exercise.name %></h3>
+                            <% if (exercise.muscles && exercise.muscles.length > 0) { %>
+                                <div class="exercise-muscles">
+                                    <% exercise.muscles.slice(0, 3).forEach(muscle => { %>
+                                        <span class="muscle-tag"><%= muscle %></span>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                            <% if (exercise.category) { %>
+                                <span class="exercise-category"><%= exercise.category %></span>
+                            <% } %>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="no-results">
+                <div class="no-results-icon">🔍</div>
+                <h2>No exercises found</h2>
+                <p>We couldn't find any exercises matching "<%= query %>"</p>
+                <div class="no-results-suggestions">
+                    <p>Try:</p>
+                    <ul>
+                        <li>Using different keywords</li>
+                        <li>Searching for a muscle group</li>
+                        <li>Browsing by <a href="/categories">category</a> or <a href="/equipment">equipment</a></li>
+                    </ul>
+                </div>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://wger.de/" target="_blank" rel="noopener">wger Workout Manager API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

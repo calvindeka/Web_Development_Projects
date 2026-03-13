@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment | Workout Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">💪</span>
+                <span class="logo-text">Workout Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/muscles">Muscles</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/equipment" class="active">Equipment</a></li>
+                <li><a href="/random" class="nav-cta">Random Workout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <div class="page-header">
+            <h1>Browse by Equipment</h1>
+            <p>Find exercises based on the equipment you have available</p>
+        </div>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Go Home</a>
+            </div>
+        <% } else if (equipment && equipment.length > 0) { %>
+            <div class="equipment-grid">
+                <% equipment.forEach(item => { %>
+                    <a href="/equipment/<%= item.id %>" class="equipment-card">
+                        <div class="equipment-icon">
+                            <% 
+                                const equipIcons = {
+                                    'barbell': '🏋️',
+                                    'dumbbell': '🏋️‍♂️',
+                                    'kettlebell': '🔔',
+                                    'machine': '⚙️',
+                                    'cable': '🔗',
+                                    'body': '🧍',
+                                    'bench': '🪑',
+                                    'pull-up': '🦍',
+                                    'sz-bar': '🏋️',
+                                    'swiss ball': '⚽',
+                                    'incline': '📐',
+                                    'gym mat': '🧘',
+                                    'none': '✋'
+                                };
+                                let equipIcon = '🔧';
+                                Object.keys(equipIcons).forEach(key => {
+                                    if (item.name.toLowerCase().includes(key)) {
+                                        equipIcon = equipIcons[key];
+                                    }
+                                });
+                            %>
+                            <%= equipIcon %>
+                        </div>
+                        <h3><%= item.name %></h3>
+                    </a>
+                <% }) %>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://wger.de/" target="_blank" rel="noopener">wger Workout Manager API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

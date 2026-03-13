@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muscle Groups | Workout Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">💪</span>
+                <span class="logo-text">Workout Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/muscles" class="active">Muscles</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/equipment">Equipment</a></li>
+                <li><a href="/random" class="nav-cta">Random Workout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <div class="page-header">
+            <h1>Muscle Groups</h1>
+            <p>Select a muscle group to find targeted exercises</p>
+        </div>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Go Home</a>
+            </div>
+        <% } else if (muscles && muscles.length > 0) { %>
+            <div class="muscles-grid">
+                <% muscles.forEach(muscle => { %>
+                    <a href="/muscle/<%= muscle.id %>" class="muscle-card">
+                        <div class="muscle-icon">
+                            <% 
+                                // Assign icons based on muscle name
+                                const muscleIcons = {
+                                    'Biceps': '💪',
+                                    'Triceps': '💪',
+                                    'Chest': '🫁',
+                                    'Back': '🔙',
+                                    'Shoulders': '🦾',
+                                    'Abs': '🎯',
+                                    'Quadriceps': '🦵',
+                                    'Hamstrings': '🦵',
+                                    'Calves': '🦶',
+                                    'Glutes': '🍑',
+                                    'Forearms': '🤜',
+                                    'Lats': '🦋',
+                                    'Traps': '⬆️'
+                                };
+                                let icon = '💪';
+                                const muscleName = muscle.name_en || muscle.name;
+                                Object.keys(muscleIcons).forEach(key => {
+                                    if (muscleName.toLowerCase().includes(key.toLowerCase())) {
+                                        icon = muscleIcons[key];
+                                    }
+                                });
+                            %>
+                            <%= icon %>
+                        </div>
+                        <h3><%= muscle.name_en || muscle.name %></h3>
+                        <% if (muscle.is_front !== undefined) { %>
+                            <span class="muscle-position">
+                                <%= muscle.is_front ? 'Front' : 'Back' %>
+                            </span>
+                        <% } %>
+                    </a>
+                <% }) %>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://wger.de/" target="_blank" rel="noopener">wger Workout Manager API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover workouts and exercises for every muscle group">
+    <title>Workout Finder | Build Your Perfect Workout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">💪</span>
+                <span class="logo-text">Workout Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/muscles">Muscles</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/equipment">Equipment</a></li>
+                <li><a href="/random" class="nav-cta">Random Workout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Build Your Perfect Workout</h1>
+            <p>Discover hundreds of exercises organized by muscle group, category, or equipment</p>
+            
+            <!-- Search Form -->
+            <form action="/search" method="GET" class="search-form">
+                <div class="search-input-group">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        placeholder="Search exercises... (e.g., 'squat', 'bicep curl')" 
+                        class="search-input"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <% if (error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Try Again</a>
+            </div>
+        <% } %>
+
+        <!-- Quick Navigation Cards -->
+        <section class="quick-nav">
+            <h2>Explore Exercises</h2>
+            <div class="nav-cards">
+                <a href="/muscles" class="nav-card">
+                    <div class="nav-icon">🦴</div>
+                    <h3>By Muscle</h3>
+                    <p>Target specific muscle groups</p>
+                </a>
+                <a href="/categories" class="nav-card">
+                    <div class="nav-icon">📂</div>
+                    <h3>By Category</h3>
+                    <p>Arms, Legs, Chest & more</p>
+                </a>
+                <a href="/equipment" class="nav-card">
+                    <div class="nav-icon">🏋️</div>
+                    <h3>By Equipment</h3>
+                    <p>Dumbbells, Barbell, Bodyweight</p>
+                </a>
+                <a href="/random" class="nav-card highlight">
+                    <div class="nav-icon">🎲</div>
+                    <h3>Random Workout</h3>
+                    <p>Generate a quick workout</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Featured Exercises -->
+        <% if (featuredExercises && featuredExercises.length > 0) { %>
+        <section class="featured-section">
+            <div class="section-header">
+                <h2>Featured Exercises</h2>
+                <a href="/categories" class="btn btn-outline">View All</a>
+            </div>
+            
+            <div class="exercises-grid">
+                <% featuredExercises.forEach(exercise => { %>
+                    <% 
+                        // Get the English name
+                        let exerciseName = "Exercise";
+                        let exerciseDesc = "";
+                        if (exercise.exercises && exercise.exercises.length > 0) {
+                            const eng = exercise.exercises.find(e => e.language === 2);
+                            if (eng) {
+                                exerciseName = eng.name;
+                                exerciseDesc = eng.description;
+                            } else {
+                                exerciseName = exercise.exercises[0].name;
+                                exerciseDesc = exercise.exercises[0].description;
+                            }
+                        }
+                        // Get image
+                        let imageUrl = "/images/placeholder.svg";
+                        if (exercise.images && exercise.images.length > 0) {
+                            imageUrl = exercise.images[0].image;
+                        }
+                        // Get category name
+                        let categoryName = "";
+                        if (exercise.category) {
+                            const cat = categories.find(c => c.id === exercise.category.id);
+                            if (cat) categoryName = cat.name;
+                        }
+                    %>
+                    <article class="exercise-card">
+                        <div class="card-image">
+                            <img src="<%= imageUrl %>" alt="<%= exerciseName %>" onerror="this.src='/images/placeholder.svg'">
+                            <% if (categoryName) { %>
+                                <span class="card-badge"><%= categoryName %></span>
+                            <% } %>
+                        </div>
+                        <div class="card-content">
+                            <h3><%= exerciseName %></h3>
+                            <% if (exercise.muscles && exercise.muscles.length > 0) { %>
+                                <div class="card-muscles">
+                                    <% exercise.muscles.slice(0, 2).forEach(m => { %>
+                                        <span class="muscle-tag"><%= m.name_en || m.name %></span>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                            <a href="/exercise/<%= exercise.id %>" class="btn btn-small">View Exercise</a>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+        </section>
+        <% } %>
+
+        <!-- Muscle Groups Preview -->
+        <% if (muscles && muscles.length > 0) { %>
+        <section class="muscles-preview">
+            <div class="section-header">
+                <h2>Target Muscle Groups</h2>
+                <a href="/muscles" class="btn btn-outline">View All</a>
+            </div>
+            
+            <div class="muscle-tags">
+                <% muscles.slice(0, 10).forEach(muscle => { %>
+                    <a href="/muscle/<%= muscle.id %>" class="muscle-link">
+                        <%= muscle.name_en || muscle.name %>
+                    </a>
+                <% }) %>
+            </div>
+        </section>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://wger.de/" target="_blank" rel="noopener">wger Workout Manager API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= muscle ? (muscle.name_en || muscle.name) : 'Exercises' %> | Workout Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">💪</span>
+                <span class="logo-text">Workout Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/muscles" class="active">Muscles</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/equipment">Equipment</a></li>
+                <li><a href="/random" class="nav-cta">Random Workout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <div class="page-header">
+            <h1><%= muscle ? (muscle.name_en || muscle.name) : 'Exercises' %></h1>
+            <p>Exercises targeting this muscle group</p>
+        </div>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/muscles" class="btn btn-primary">Back to Muscles</a>
+            </div>
+        <% } else if (exercises && exercises.length > 0) { %>
+            <p class="results-count">Found <%= exercises.length %> exercise<%= exercises.length > 1 ? 's' : '' %></p>
+            
+            <div class="exercises-grid">
+                <% exercises.forEach(exercise => { %>
+                    <% 
+                        let exerciseName = "Exercise";
+                        if (exercise.exercises && exercise.exercises.length > 0) {
+                            const eng = exercise.exercises.find(e => e.language === 2);
+                            exerciseName = eng ? eng.name : exercise.exercises[0].name;
+                        }
+                        let imageUrl = null;
+                        if (exercise.images && exercise.images.length > 0) {
+                            imageUrl = exercise.images[0].image;
+                        }
+                    %>
+                    <article class="exercise-card">
+                        <div class="card-image">
+                            <% if (imageUrl && !imageUrl.includes('placeholder')) { %>
+                                <img src="<%= imageUrl %>" alt="<%= exerciseName %>" loading="lazy">
+                            <% } else { %>
+                                <div class="no-image-placeholder">
+                                    <span>🏋️</span>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="card-content">
+                            <h3><%= exerciseName %></h3>
+                            <% if (exercise.muscles && exercise.muscles.length > 0) { %>
+                                <div class="card-muscles">
+                                    <% exercise.muscles.slice(0, 3).forEach(m => { %>
+                                        <span class="muscle-tag"><%= m.name_en || m.name %></span>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                            <a href="/exercise/<%= exercise.id %>" class="btn btn-small">View Exercise</a>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="error-message">
+                <p>No exercises found for this muscle group.</p>
+                <a href="/muscles" class="btn btn-primary">Back to Muscles</a>
+            </div>
+        <% } %>
+
+        <div class="back-section">
+            <a href="/muscles" class="btn btn-outline">Back to Muscle Groups</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://wger.de/" target="_blank" rel="noopener">wger Workout Manager API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

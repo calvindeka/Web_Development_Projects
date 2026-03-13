@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= exercise.name %> | Workout Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">💪</span>
+                <span class="logo-text">Workout Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/muscles">Muscles</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/equipment">Equipment</a></li>
+                <li><a href="/random" class="nav-cta">Random Workout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <% if (error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Go Home</a>
+            </div>
+        <% } else { %>
+            <div class="exercise-detail">
+                <a href="javascript:history.back()" class="back-link">← Back</a>
+                
+                <div class="exercise-detail-header">
+                    <h1><%= exercise.name %></h1>
+                    <% if (exercise.category) { %>
+                        <span class="detail-category"><%= exercise.category %></span>
+                    <% } %>
+                </div>
+
+                <div class="exercise-detail-content">
+                    <!-- Images Section -->
+                    <% if (exercise.images && exercise.images.length > 0) { %>
+                        <div class="exercise-images">
+                            <% exercise.images.forEach((img, index) => { %>
+                                <div class="exercise-detail-image">
+                                    <img src="<%= img %>" alt="<%= exercise.name %> - Image <%= index + 1 %>" loading="lazy">
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% } else { %>
+                        <div class="exercise-images">
+                            <div class="exercise-detail-image no-image-large">
+                                <span>🏋️</span>
+                                <p>No image available</p>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Info Grid -->
+                    <div class="exercise-detail-info">
+                        <!-- Muscles -->
+                        <div class="info-section">
+                            <h2>Target Muscles</h2>
+                            <% if (exercise.muscles && exercise.muscles.length > 0) { %>
+                                <div class="muscle-list">
+                                    <% exercise.muscles.forEach(muscle => { %>
+                                        <span class="muscle-badge primary"><%= muscle %></span>
+                                    <% }) %>
+                                </div>
+                            <% } else { %>
+                                <p class="no-data">No muscle data available</p>
+                            <% } %>
+                        </div>
+
+                        <!-- Secondary Muscles -->
+                        <% if (exercise.secondaryMuscles && exercise.secondaryMuscles.length > 0) { %>
+                            <div class="info-section">
+                                <h2>Secondary Muscles</h2>
+                                <div class="muscle-list">
+                                    <% exercise.secondaryMuscles.forEach(muscle => { %>
+                                        <span class="muscle-badge secondary"><%= muscle %></span>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <!-- Equipment -->
+                        <div class="info-section">
+                            <h2>Equipment Needed</h2>
+                            <% if (exercise.equipment && exercise.equipment.length > 0) { %>
+                                <div class="equipment-list">
+                                    <% exercise.equipment.forEach(equip => { %>
+                                        <span class="equipment-badge"><%= equip %></span>
+                                    <% }) %>
+                                </div>
+                            <% } else { %>
+                                <span class="equipment-badge">Body weight (no equipment)</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="exercise-instructions">
+                        <h2>How to Perform</h2>
+                        <% if (exercise.description) { %>
+                            <div class="instructions-content">
+                                <%- exercise.description %>
+                            </div>
+                        <% } else { %>
+                            <p class="no-data">No detailed instructions available for this exercise.</p>
+                        <% } %>
+                    </div>
+
+                    <!-- Notes -->
+                    <% if (exercise.notes && exercise.notes.length > 0) { %>
+                        <div class="exercise-notes">
+                            <h2>Tips & Notes</h2>
+                            <ul class="notes-list">
+                                <% exercise.notes.forEach(note => { %>
+                                    <li><%= note %></li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                    <% } %>
+
+                    <!-- Variations -->
+                    <% if (exercise.variations && exercise.variations.length > 0) { %>
+                        <div class="exercise-variations">
+                            <h2>Variations</h2>
+                            <div class="variations-list">
+                                <% exercise.variations.forEach(variation => { %>
+                                    <a href="/exercise/<%= variation.id %>" class="variation-link"><%= variation.name %></a>
+                                <% }) %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="exercise-actions">
+                    <a href="/random" class="btn btn-primary">Try Another Exercise</a>
+                    <a href="/muscles" class="btn btn-secondary">Browse by Muscle</a>
+                </div>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://wger.de/" target="_blank" rel="noopener">wger Workout Manager API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

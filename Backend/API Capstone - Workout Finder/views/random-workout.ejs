@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Workout | Workout Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">💪</span>
+                <span class="logo-text">Workout Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/muscles">Muscles</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/equipment">Equipment</a></li>
+                <li><a href="/random" class="nav-cta active">Random Workout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <div class="page-header random-header">
+            <div class="random-badge">🎲 RANDOMLY GENERATED</div>
+            <h1>Your Random Workout</h1>
+            <p>Here are 6 exercises to get you started. Refresh for a new set!</p>
+            <a href="/random" class="btn btn-primary">🔄 Generate New Workout</a>
+        </div>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Go Home</a>
+            </div>
+        <% } else if (exercises && exercises.length > 0) { %>
+            <div class="workout-grid">
+                <% exercises.forEach((exercise, index) => { 
+                    // Get exercise name from translations
+                    let exerciseName = exercise.name || "Exercise";
+                    let exerciseDesc = "";
+                    
+                    if (exercise.exercises && exercise.exercises.length > 0) {
+                        const eng = exercise.exercises.find(e => e.language === 2) || exercise.exercises[0];
+                        exerciseName = eng.name || exerciseName;
+                        exerciseDesc = eng.description || "";
+                    }
+                    
+                    // Get first image if available
+                    let imageUrl = null;
+                    if (exercise.images && exercise.images.length > 0) {
+                        imageUrl = exercise.images[0].image;
+                    }
+                    
+                    // Get muscles
+                    let muscleNames = [];
+                    if (exercise.muscles && exercise.muscles.length > 0) {
+                        muscleNames = exercise.muscles.map(m => m.name_en || m.name);
+                    }
+                    
+                    // Get category
+                    let categoryName = "";
+                    if (exercise.category) {
+                        categoryName = exercise.category.name || "";
+                    }
+                %>
+                    <div class="workout-card">
+                        <div class="workout-number"><%= index + 1 %></div>
+                        <% if (imageUrl) { %>
+                            <div class="workout-image">
+                                <img src="<%= imageUrl %>" alt="<%= exerciseName %>" loading="lazy">
+                            </div>
+                        <% } else { %>
+                            <div class="workout-image no-image">
+                                <span>🏋️</span>
+                            </div>
+                        <% } %>
+                        <div class="workout-info">
+                            <h3><%= exerciseName %></h3>
+                            <% if (categoryName) { %>
+                                <span class="workout-category"><%= categoryName %></span>
+                            <% } %>
+                            <% if (muscleNames.length > 0) { %>
+                                <div class="workout-muscles">
+                                    <% muscleNames.slice(0, 2).forEach(muscle => { %>
+                                        <span class="muscle-tag"><%= muscle %></span>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                            <a href="/exercise/<%= exercise.id %>" class="btn btn-secondary btn-small">View Details</a>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+            
+            <div class="workout-tips">
+                <h2>💡 Quick Tips</h2>
+                <ul>
+                    <li>Warm up for 5-10 minutes before starting</li>
+                    <li>Perform 3-4 sets of 10-15 reps for each exercise</li>
+                    <li>Rest 60-90 seconds between sets</li>
+                    <li>Focus on proper form over speed</li>
+                    <li>Stay hydrated throughout your workout</li>
+                </ul>
+            </div>
+        <% } else { %>
+            <div class="no-results">
+                <div class="no-results-icon">🎲</div>
+                <h2>Couldn't generate workout</h2>
+                <p>Something went wrong. Please try again.</p>
+                <a href="/random" class="btn btn-primary">Try Again</a>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://wger.de/" target="_blank" rel="noopener">wger Workout Manager API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>
