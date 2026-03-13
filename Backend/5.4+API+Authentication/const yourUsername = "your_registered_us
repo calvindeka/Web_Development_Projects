@@ -1,0 +1,4 @@
+const yourUsername = "your_registered_username";
+const yourPassword = "your_registered_password";
+const yourAPIKey = "your_api_key_from_registration";
+const yourBearerToken = "your_token_from_registration";
