@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= cocktail ? cocktail.strDrink : 'Cocktail' %> | Cocktail Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🍹</span>
+                <span class="logo-text">Cocktail Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/random">Random</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <% if (error) { %>
+            <!-- Error Message -->
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Back to Home</a>
+            </div>
+        <% } else if (cocktail) { %>
+            <!-- Cocktail Detail -->
+            <article class="cocktail-detail">
+                <div class="detail-header">
+                    <div class="detail-image">
+                        <img src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
+                    </div>
+                    <div class="detail-title">
+                        <span class="detail-category"><%= cocktail.strCategory %></span>
+                        <h1><%= cocktail.strDrink %></h1>
+                        <div class="detail-meta">
+                            <span class="meta-badge"><%= cocktail.strAlcoholic %></span>
+                            <span class="meta-badge"><%= cocktail.strGlass %></span>
+                            <% if (cocktail.strIBA) { %>
+                                <span class="meta-badge iba">IBA: <%= cocktail.strIBA %></span>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-content">
+                    <!-- Ingredients -->
+                    <section class="detail-section">
+                        <h2>Ingredients</h2>
+                        <ul class="detail-ingredients">
+                            <% ingredients.forEach(ing => { %>
+                                <li class="ingredient-item">
+                                    <img 
+                                        src="https://www.thecocktaildb.com/images/ingredients/<%= encodeURIComponent(ing.name) %>-Small.png" 
+                                        alt="<%= ing.name %>"
+                                        class="ingredient-image"
+                                        onerror="this.style.display='none'"
+                                    >
+                                    <div class="ingredient-info">
+                                        <span class="ingredient-name"><%= ing.name %></span>
+                                        <% if (ing.measure) { %>
+                                            <span class="ingredient-measure"><%= ing.measure %></span>
+                                        <% } %>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </section>
+
+                    <!-- Instructions -->
+                    <section class="detail-section">
+                        <h2>Instructions</h2>
+                        <div class="instructions-text">
+                            <p><%= cocktail.strInstructions %></p>
+                        </div>
+                        
+                        <% if (cocktail.strInstructionsES || cocktail.strInstructionsDE || cocktail.strInstructionsFR) { %>
+                            <div class="other-languages">
+                                <h4>Other Languages</h4>
+                                <% if (cocktail.strInstructionsES) { %>
+                                    <details>
+                                        <summary>Spanish</summary>
+                                        <p><%= cocktail.strInstructionsES %></p>
+                                    </details>
+                                <% } %>
+                                <% if (cocktail.strInstructionsDE) { %>
+                                    <details>
+                                        <summary>German</summary>
+                                        <p><%= cocktail.strInstructionsDE %></p>
+                                    </details>
+                                <% } %>
+                                <% if (cocktail.strInstructionsFR) { %>
+                                    <details>
+                                        <summary>French</summary>
+                                        <p><%= cocktail.strInstructionsFR %></p>
+                                    </details>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    </section>
+
+                    <% if (cocktail.strTags) { %>
+                        <!-- Tags -->
+                        <section class="detail-section">
+                            <h2>Tags</h2>
+                            <div class="tags">
+                                <% cocktail.strTags.split(',').forEach(tag => { %>
+                                    <span class="tag"><%= tag.trim() %></span>
+                                <% }) %>
+                            </div>
+                        </section>
+                    <% } %>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="detail-actions">
+                    <a href="/random" class="btn btn-primary">Try Another Random</a>
+                    <a href="/" class="btn btn-outline">Back to Search</a>
+                </div>
+            </article>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://www.thecocktaildb.com/" target="_blank" rel="noopener">TheCocktailDB API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

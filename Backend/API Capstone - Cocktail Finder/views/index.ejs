@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover amazing cocktail recipes with Cocktail Finder">
+    <title>Cocktail Finder | Discover Amazing Drinks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🍹</span>
+                <span class="logo-text">Cocktail Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/random">Random</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Discover Your Next Favorite Cocktail</h1>
+            <p>Search thousands of cocktail recipes or let us surprise you with something new</p>
+            
+            <!-- Search Form -->
+            <form action="/search" method="POST" class="search-form">
+                <div class="search-type">
+                    <label class="radio-label">
+                        <input type="radio" name="searchType" value="name" checked>
+                        <span>Search by Name</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="searchType" value="ingredient">
+                        <span>Search by Ingredient</span>
+                    </label>
+                </div>
+                <div class="search-input-group">
+                    <input 
+                        type="text" 
+                        name="query" 
+                        placeholder="Try 'Margarita' or 'Vodka'..." 
+                        class="search-input"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <% if (error) { %>
+            <!-- Error Message -->
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/" class="btn btn-primary">Try Again</a>
+            </div>
+        <% } else if (cocktail) { %>
+            <!-- Featured Cocktail -->
+            <section class="featured-section">
+                <div class="section-header">
+                    <h2>Today's Featured Cocktail</h2>
+                    <a href="/random" class="btn btn-outline">Get Another</a>
+                </div>
+                
+                <article class="featured-cocktail">
+                    <div class="cocktail-image">
+                        <img src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
+                        <span class="cocktail-category"><%= cocktail.strCategory %></span>
+                    </div>
+                    
+                    <div class="cocktail-info">
+                        <h3 class="cocktail-name"><%= cocktail.strDrink %></h3>
+                        
+                        <div class="cocktail-meta">
+                            <span class="meta-item">
+                                <strong>Glass:</strong> <%= cocktail.strGlass %>
+                            </span>
+                            <% if (cocktail.strAlcoholic) { %>
+                            <span class="meta-item">
+                                <strong>Type:</strong> <%= cocktail.strAlcoholic %>
+                            </span>
+                            <% } %>
+                        </div>
+                        
+                        <div class="ingredients-section">
+                            <h4>Ingredients</h4>
+                            <ul class="ingredients-list">
+                                <% ingredients.forEach(ing => { %>
+                                    <li>
+                                        <span class="measure"><%= ing.measure %></span>
+                                        <span class="ingredient"><%= ing.name %></span>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                        
+                        <div class="instructions-section">
+                            <h4>Instructions</h4>
+                            <p><%= cocktail.strInstructions %></p>
+                        </div>
+                        
+                        <a href="/cocktail/<%= cocktail.idDrink %>" class="btn btn-primary">View Full Details</a>
+                    </div>
+                </article>
+            </section>
+        <% } %>
+        
+        <!-- Info Cards -->
+        <section class="info-section">
+            <h2>How It Works</h2>
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-icon">🔍</div>
+                    <h3>Search</h3>
+                    <p>Search by cocktail name or ingredient to find the perfect drink</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🎲</div>
+                    <h3>Discover</h3>
+                    <p>Get random cocktail suggestions and discover new favorites</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📋</div>
+                    <h3>Mix</h3>
+                    <p>Follow detailed recipes with ingredients and step-by-step instructions</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://www.thecocktaildb.com/" target="_blank" rel="noopener">TheCocktailDB API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= categoryName %> Cocktails | Cocktail Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🍹</span>
+                <span class="logo-text">Cocktail Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/random">Random</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <div class="page-header">
+            <h1><%= categoryName %></h1>
+            <p>Browse all cocktails in this category</p>
+        </div>
+
+        <% if (error) { %>
+            <!-- Error Message -->
+            <div class="error-message">
+                <p><%= error %></p>
+                <a href="/categories" class="btn btn-primary">Back to Categories</a>
+            </div>
+        <% } else if (cocktails && cocktails.length > 0) { %>
+            <!-- Results Count -->
+            <p class="results-count">Found <%= cocktails.length %> cocktail<%= cocktails.length > 1 ? 's' : '' %></p>
+            
+            <!-- Cocktails Grid -->
+            <div class="cocktails-grid">
+                <% cocktails.forEach(cocktail => { %>
+                    <article class="cocktail-card">
+                        <div class="card-image">
+                            <img src="<%= cocktail.strDrinkThumb %>/preview" alt="<%= cocktail.strDrink %>">
+                        </div>
+                        <div class="card-content">
+                            <h3><%= cocktail.strDrink %></h3>
+                            <a href="/cocktail/<%= cocktail.idDrink %>" class="btn btn-small">View Recipe</a>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="error-message">
+                <p>No cocktails found in this category.</p>
+                <a href="/categories" class="btn btn-primary">Back to Categories</a>
+            </div>
+        <% } %>
+
+        <!-- Back Button -->
+        <div class="back-section">
+            <a href="/categories" class="btn btn-outline">Back to Categories</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Powered by <a href="https://www.thecocktaildb.com/" target="_blank" rel="noopener">TheCocktailDB API</a></p>
+            <p class="footer-note">Built by Calvin Deka | API Capstone Project</p>
+        </div>
+    </footer>
+</body>
+</html>
