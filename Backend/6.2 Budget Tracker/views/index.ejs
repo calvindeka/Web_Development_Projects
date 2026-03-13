@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Tracker</title>
+  <link rel="stylesheet" href="/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>💰 Budget Tracker</h1>
+      <div class="balance-card">
+        <h3>Balance</h3>
+        <span class="balance <%= summary.balance >= 0 ? 'positive' : 'negative' %>">
+          $<%= summary.balance.toFixed(2) %>
+        </span>
+      </div>
+      <div class="summary">
+        <div class="income-box">
+          <h4>Income</h4>
+          <span class="positive">+$<%= summary.income.toFixed(2) %></span>
+        </div>
+        <div class="expense-box">
+          <h4>Expenses</h4>
+          <span class="negative">-$<%= summary.expenses.toFixed(2) %></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <div class="add-transaction">
+        <h3>Add New Transaction</h3>
+        <form action="/add-transaction" method="POST">
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required placeholder="E.g., Salary, Groceries...">
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount ($):</label>
+            <input type="number" step="0.01" id="amount" name="amount" required placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label for="type">Type:</label>
+            <select id="type" name="type" required>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+          <button type="submit" class="btn">Add Transaction</button>
+        </form>
+      </div>
+
+      <div class="transaction-history">
+        <h3>Transaction History</h3>
+        <% if (transactions.length === 0) { %>
+          <p class="no-data">No transactions found. Add one above!</p>
+        <% } else { %>
+          <ul class="list">
+            <% transactions.forEach(transaction => { %>
+              <li class="transaction-item <%= transaction.type === 'income' ? 'income-item' : 'expense-item' %>">
+                <span class="desc"><%= transaction.description %></span>
+                <span class="amt">
+                  <%= transaction.type === 'income' ? '+' : '-' %>$<%= transaction.amount.toFixed(2) %>
+                </span>
+                <form action="/delete-transaction/<%= transaction.id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="delete-btn" aria-label="Delete">✕</button>
+                </form>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
