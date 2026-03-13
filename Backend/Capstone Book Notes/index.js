@@ -1,17 +1,20 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = 3000;
 
 // Connect to PostgreSQL database for Data Persistence
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "book_notes", 
-  password: "Mariah&Calvin88", // IMPORTANT: CHANGE THIS
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME, 
+  password: process.env.DB_PASSWORD, // Loaded safely from .env!
+  port: process.env.DB_PORT,
 });
 db.connect();
 
