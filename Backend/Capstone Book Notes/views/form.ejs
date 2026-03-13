@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= book.id ? 'Edit Book' : 'Add New Book' %> - Book Notes</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <h1><%= book.id ? 'Edit Book Notes' : 'Add a New Book' %></h1>
+        
+        <form action="<%= action %>" method="POST" class="book-form">
+            <div class="form-group">
+                <label for="title">Book Title</label>
+                <input type="text" id="title" name="title" required value="<%= book.title || '' %>">
+            </div>
+
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" name="author" required value="<%= book.author || '' %>">
+            </div>
+
+            <div class="form-group">
+                <label for="isbn">ISBN (For Book Cover API)</label>
+                <input type="text" id="isbn" name="isbn" value="<%= book.isbn || '' %>">
+                <small>Find the 10 or 13 digit ISBN on the back of the book to fetch exactly the right cover art.</small>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="rating">Rating (1-10)</label>
+                    <input type="number" id="rating" name="rating" min="1" max="10" required value="<%= book.rating || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="date_read">Date Read</label>
+                    <input type="date" id="date_read" name="date_read" required value="<%= book.date_read || '' %>">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="review">Your Notes / Thoughts</label>
+                <textarea id="review" name="review" rows="8" required><%= book.review || '' %></textarea>
+            </div>
+
+            <div class="form-actions">
+                <a href="/" class="btn cancel-btn">Cancel</a>
+                <button type="submit" class="btn primary-btn"><%= book.id ? 'Save Changes' : 'Add Book' %></button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

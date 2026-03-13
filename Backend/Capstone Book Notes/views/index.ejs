@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Book Notes</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>📚 My Book Notes</h1>
+        <p>Inspired by Derek Sivers. Notes on every book I’ve read.</p>
+        <a href="/new" class="btn primary-btn">+ Add New Book</a>
+    </header>
+
+    <div class="sorting-options">
+        <span>Sort by:</span>
+        <a href="/?sort=rating" class="<%= currentSort === 'rating' ? 'active' : '' %>">Rating</a> | 
+        <a href="/?sort=recency" class="<%= currentSort === 'recency' ? 'active' : '' %>">Recency</a> | 
+        <a href="/?sort=title" class="<%= currentSort === 'title' ? 'active' : '' %>">Title</a>
+    </div>
+
+    <main class="books-container">
+        <% if (books.length === 0) { %>
+            <div class="no-books">
+                <p>You haven't added any books yet! Click "Add New Book" to start.</p>
+            </div>
+        <% } else { %>
+            <% books.forEach(book => { %>
+                <article class="book-card">
+                    <!-- API Integration: Using OpenLibrary API for Book Covers -->
+                    <div class="book-cover">
+                        <img 
+                            src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" 
+                            alt="Cover of <%= book.title %>" 
+                            onerror="this.src='/placeholder.jpg'"
+                        >
+                    </div>
+                    
+                    <div class="book-info">
+                        <h2><%= book.title %></h2>
+                        <h4 class="author">by <%= book.author %></h4>
+                        <div class="meta-data">
+                            <span class="rating">Rating: <%= book.rating %>/10</span>
+                            <span class="date">Read on: <%= new Date(book.date_read).toLocaleDateString() %></span>
+                        </div>
+                        <p class="review"><%= book.review %></p>
+                        
+                        <div class="actions">
+                            <a href="/edit/<%= book.id %>" class="btn edit-btn">Edit</a>
+                            <form action="/delete/<%= book.id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="btn delete-btn" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            <% }) %>
+        <% } %>
+    </main>
+
+    <footer>
+        <p>Built as a Node.js / PostgreSQL Capstone Project</p>
+    </footer>
+</body>
+</html>
