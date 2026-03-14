@@ -2,9 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -14,11 +11,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 const db = new pg.Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: "postgres",
+  host: "localhost",
+  database: "secrets",
+  password: "123456",
+  port: 5432,
 });
 db.connect();
 
@@ -46,7 +43,7 @@ app.post("/register", async (req, res) => {
     if (checkResult.rows.length > 0) {
       res.send("Email already exists. Try logging in.");
     } else {
-      // Hashing the password and saving it in the database
+      //hashing the password and saving it in the database
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
           console.error("Error hashing password:", err);
@@ -76,13 +73,11 @@ app.post("/login", async (req, res) => {
     if (result.rows.length > 0) {
       const user = result.rows[0];
       const storedHashedPassword = user.password;
-      
-      // Verifying the password
-      bcrypt.compare(loginPassword, storedHashedPassword, (err, isMatch) => {
+      bcrypt.compare(loginPassword, storedHashedPassword, (err, result) => {
         if (err) {
           console.error("Error comparing passwords:", err);
         } else {
-          if (isMatch) {
+          if (result) {
             res.render("secrets.ejs");
           } else {
             res.send("Incorrect Password");
