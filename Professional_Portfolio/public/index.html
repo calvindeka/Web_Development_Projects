@@ -14,6 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -68,6 +69,26 @@
         /* Hide scrollbar utility */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* ── Spotify Now Playing Widget ── */
+        @keyframes vinyl-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        .np-vinyl { animation: vinyl-spin 8s linear infinite; }
+        .np-vinyl.paused { animation-play-state: paused; }
+
+        #now-playing {
+            transform: translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+        }
+        #now-playing.np-show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 
@@ -461,6 +482,62 @@
         </div>
     </footer>
 
+    <!-- ─── Spotify Now Playing Widget ─────────────────────────────── -->
+    <div id="now-playing"
+        class="fixed bottom-6 right-6 z-40 w-[17rem]
+               bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm
+               border border-zinc-200 dark:border-zinc-800
+               rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Emerald top accent bar -->
+        <div class="h-[2px] bg-gradient-to-r from-emerald-400 to-green-500"></div>
+        <div class="p-4">
+            <!-- Header row -->
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Now Playing</span>
+                </div>
+                <i class="fa-brands fa-spotify text-emerald-500"></i>
+            </div>
+            <!-- Track row -->
+            <div class="flex items-center gap-3">
+                <!-- Spinning vinyl disc -->
+                <div class="relative shrink-0">
+                    <img id="np-art" src="" alt="Album art"
+                         class="w-12 h-12 rounded-full object-cover shadow-md np-vinyl">
+                    <!-- Center hole -->
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div class="w-2.5 h-2.5 rounded-full bg-white dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-700"></div>
+                    </div>
+                </div>
+                <!-- Title + artist -->
+                <a id="np-link" href="#" target="_blank" rel="noopener" class="flex-1 min-w-0 group">
+                    <p id="np-title" class="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate
+                                            group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"></p>
+                    <p id="np-artist" class="text-xs text-zinc-500 dark:text-zinc-400 truncate mt-0.5"></p>
+                </a>
+                <!-- Preview play / pause button -->
+                <button id="np-preview-btn" onclick="NowPlaying.togglePreview()"
+                    class="shrink-0 w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-400
+                           active:scale-95 transition-all flex items-center justify-center
+                           text-white shadow-sm"
+                    title="Play 30s preview" aria-label="Play preview">
+                    <i id="np-btn-icon" class="fa-solid fa-play text-[11px] ml-0.5"></i>
+                </button>
+            </div>
+            <!-- Progress bar -->
+            <div class="mt-3.5">
+                <div class="h-[3px] bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                    <div id="np-progress" class="h-full bg-emerald-500 rounded-full" style="width:0%"></div>
+                </div>
+                <div class="flex justify-between mt-1.5">
+                    <span id="np-elapsed" class="text-[10px] text-zinc-400">0:00</span>
+                    <span id="np-duration" class="text-[10px] text-zinc-400">0:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ── Scroll progress bar
         window.addEventListener('scroll', () => {
@@ -509,6 +586,107 @@
                 setTimeout(() => el.classList.add('visible'), 80);
             });
         });
+
+        // ── Spotify Now Playing
+        const NowPlaying = (() => {
+            let audio = null;
+            let isPreviewPlaying = false;
+            let pollTime = null;
+            let pollProgress = 0;
+            let pollDuration = 0;
+            let progressInterval = null;
+            let currentPreviewUrl = null;
+
+            function fmtMs(ms) {
+                const s = Math.max(0, Math.floor(ms / 1000));
+                return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+            }
+
+            function startProgressTick() {
+                if (progressInterval) clearInterval(progressInterval);
+                progressInterval = setInterval(() => {
+                    if (!pollTime || !pollDuration) return;
+                    const elapsed = pollProgress + (Date.now() - pollTime);
+                    const pct = Math.min((elapsed / pollDuration) * 100, 100);
+                    document.getElementById('np-progress').style.width = pct + '%';
+                    document.getElementById('np-elapsed').textContent = fmtMs(elapsed);
+                }, 1000);
+            }
+
+            async function fetchNow() {
+                try {
+                    const res = await fetch('/api/now-playing');
+                    const data = await res.json();
+                    render(data);
+                } catch { /* fail silently */ }
+            }
+
+            function render(data) {
+                const widget = document.getElementById('now-playing');
+                if (!data.isPlaying) {
+                    widget.classList.remove('np-show');
+                    return;
+                }
+                document.getElementById('np-art').src = data.albumArt || '';
+                document.getElementById('np-title').textContent = data.title;
+                document.getElementById('np-artist').textContent = data.artist;
+                document.getElementById('np-link').href = data.trackUrl;
+                document.getElementById('np-duration').textContent = fmtMs(data.durationMs);
+
+                // If the track changed, reset the audio
+                if (currentPreviewUrl !== data.previewUrl) {
+                    if (audio) { audio.pause(); audio = null; }
+                    isPreviewPlaying = false;
+                    updateBtn();
+                    document.getElementById('np-art').classList.remove('paused');
+                    currentPreviewUrl = data.previewUrl;
+                }
+
+                pollTime = Date.now();
+                pollProgress = data.progressMs;
+                pollDuration = data.durationMs;
+
+                document.getElementById('np-progress').style.width =
+                    `${(data.progressMs / data.durationMs) * 100}%`;
+
+                widget.classList.add('np-show');
+                startProgressTick();
+            }
+
+            function togglePreview() {
+                if (!currentPreviewUrl) return;
+                if (!audio) {
+                    audio = new Audio(currentPreviewUrl);
+                    audio.volume = 0.6;
+                    audio.addEventListener('ended', () => {
+                        isPreviewPlaying = false;
+                        updateBtn();
+                        document.getElementById('np-art').classList.add('paused');
+                    });
+                }
+                if (isPreviewPlaying) {
+                    audio.pause();
+                    document.getElementById('np-art').classList.add('paused');
+                } else {
+                    audio.play();
+                    document.getElementById('np-art').classList.remove('paused');
+                }
+                isPreviewPlaying = !isPreviewPlaying;
+                updateBtn();
+            }
+
+            function updateBtn() {
+                const icon = document.getElementById('np-btn-icon');
+                if (icon) icon.className = isPreviewPlaying
+                    ? 'fa-solid fa-pause text-[11px]'
+                    : 'fa-solid fa-play text-[11px] ml-0.5';
+            }
+
+            fetchNow();
+            setInterval(fetchNow, 30000);
+
+            return { togglePreview };
+        })();
     </script>
 
 </body>

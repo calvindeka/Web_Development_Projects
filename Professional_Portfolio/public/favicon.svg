@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background: dark rounded square -->
+  <rect width="32" height="32" rx="8" fill="#18181b"/>
+  <!-- Letter C: arc from upper-right to lower-right, opening right -->
+  <path d="M22.1 10.9A8 8 0 1 0 22.1 21.1"
+        stroke="#3b82f6"
+        stroke-width="3.2"
+        stroke-linecap="round"
+        fill="none"/>
+  <!-- Small dot accent (bottom right of C gap) -->
+  <circle cx="22.9" cy="21.8" r="1.4" fill="#3b82f6"/>
+</svg>
