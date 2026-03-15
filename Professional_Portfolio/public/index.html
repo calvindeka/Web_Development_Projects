@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calvin Deka | Software Engineer</title>
+    <!-- Dark mode: apply class before paint to prevent flicker -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Scroll progress bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: #2563eb;
+            z-index: 100;
+            transition: width 0.08s linear;
+        }
+
+        /* Hero dot pattern */
+        .hero-dots {
+            background-image: radial-gradient(circle, #d4d4d4 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+        .dark .hero-dots {
+            background-image: radial-gradient(circle, #27272a 1px, transparent 1px);
+        }
+
+        /* Scroll-triggered fade in */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        /* Text selection */
+        ::selection { background-color: #2563eb; color: white; }
+
+        /* Hide scrollbar utility */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+
+    <!-- Scroll progress indicator -->
+    <div id="progress-bar"></div>
+
+    <!-- ─── Header ──────────────────────────────────────── -->
+    <header class="fixed top-0 w-full z-50 bg-zinc-50/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="#" class="text-sm font-semibold tracking-tight">Calvin.</a>
+
+            <!-- Desktop nav -->
+            <nav class="hidden md:flex gap-8 text-sm font-medium">
+                <a href="#about"      class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">About</a>
+                <a href="#experience" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Experience</a>
+                <a href="#projects"   class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Work</a>
+                <a href="#writing"    class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Writing</a>
+                <a href="#contact"    class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Contact</a>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <!-- Dark mode toggle -->
+                <button id="theme-toggle" aria-label="Toggle theme"
+                    class="w-9 h-9 flex items-center justify-center rounded-lg text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                    <i class="fa-solid fa-sun text-sm dark:hidden"></i>
+                    <i class="fa-solid fa-moon text-sm hidden dark:block"></i>
+                </button>
+
+                <!-- CV -->
+                <a href="/resume.pdf" target="_blank"
+                    class="hidden md:flex items-center gap-1.5 text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2">
+                    CV <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+
+                <!-- Hamburger (mobile) -->
+                <button id="hamburger" aria-label="Open menu"
+                    class="md:hidden w-9 h-9 flex items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                    <i id="hamburger-icon" class="fa-solid fa-bars text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu drawer -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50/98 dark:bg-zinc-950/98 px-6 pb-5 pt-4">
+            <nav class="flex flex-col gap-4 text-sm font-medium">
+                <a href="#about"      onclick="closeMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">About</a>
+                <a href="#experience" onclick="closeMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Experience</a>
+                <a href="#projects"   onclick="closeMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Work</a>
+                <a href="#writing"    onclick="closeMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Writing</a>
+                <a href="#contact"    onclick="closeMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Contact</a>
+                <a href="/resume.pdf" target="_blank" class="text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                    CV <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ─── Hero ───────────────────────────────────────── -->
+    <section class="min-h-[90vh] flex items-center pt-16 px-6 relative overflow-hidden hero-dots">
+        <!-- Gradient fade over dot pattern -->
+        <div class="absolute inset-0 bg-gradient-to-b from-zinc-50/20 via-zinc-50/60 to-zinc-50 dark:from-zinc-950/20 dark:via-zinc-950/60 dark:to-zinc-950 pointer-events-none"></div>
+
+        <div class="max-w-3xl mx-auto w-full relative z-10 py-20">
+            <!-- Availability badge -->
+            <div class="inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 mb-8 fade-in">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Available for new opportunities
+            </div>
+
+            <h1 class="text-4xl md:text-[3.4rem] font-semibold tracking-tight leading-[1.1] mb-6 fade-in delay-1">
+                Software engineer building
+                <span class="text-zinc-400 dark:text-zinc-500"> clean, resilient, and human-centered digital products.</span>
+            </h1>
+
+            <p class="text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mb-10 leading-relaxed fade-in delay-2">
+                Full-stack developer focused on modern web technologies. I write code that's as functional as it is readable.
+            </p>
+
+            <div class="flex items-center gap-6 text-sm font-medium fade-in delay-3">
+                <a href="#projects"
+                    class="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-6 py-3 rounded-lg hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors shadow-sm">
+                    View Work
+                </a>
+                <a href="#contact" class="text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2">
+                    Get in touch <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+            <!-- Social links -->
+            <div class="flex items-center gap-5 mt-12 fade-in delay-3">
+                <a href="#" aria-label="GitHub"
+                    class="text-zinc-400 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+                    <i class="fa-brands fa-github text-lg"></i>
+                </a>
+                <a href="#" aria-label="LinkedIn"
+                    class="text-zinc-400 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+                    <i class="fa-brands fa-linkedin text-lg"></i>
+                </a>
+                <a href="#" aria-label="Twitter / X"
+                    class="text-zinc-400 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+                    <i class="fa-brands fa-x-twitter text-lg"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── About ──────────────────────────────────────── -->
+    <section id="about" class="py-24 px-6">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-16">
+            <!-- Bio -->
+            <div class="md:w-1/2 fade-in">
+                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">About</p>
+                <h2 class="text-2xl font-semibold tracking-tight mb-6">Background</h2>
+                <div class="space-y-4 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
+                    <p>
+                        I specialize in constructing robust backend systems and translating complex logic into intuitive front-end interfaces. My methodology involves relentless refactoring until the resulting code is as simple as possible.
+                    </p>
+                    <p>
+                        Beyond syntax, I focus heavily on security protocols — including OAuth 2.0 standards, encrypted session architecture, and authentication flow design.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stack -->
+            <div class="md:w-1/2 fade-in delay-1">
+                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">Stack</p>
+                <h2 class="text-2xl font-semibold tracking-tight mb-6">Tools & Technologies</h2>
+                <div class="grid grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h4 class="font-medium border-b border-zinc-200 dark:border-zinc-800 pb-2 mb-3">Backend</h4>
+                        <ul class="space-y-2.5 text-zinc-500 dark:text-zinc-400">
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-brands fa-node-js text-green-600 w-4 text-sm"></i> Node.js / Express
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-database text-sky-500 w-4 text-sm"></i> PostgreSQL
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-plug text-violet-500 w-4 text-sm"></i> REST APIs
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-shield-halved text-amber-500 w-4 text-sm"></i> Passport.js / Auth
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-medium border-b border-zinc-200 dark:border-zinc-800 pb-2 mb-3">Frontend</h4>
+                        <ul class="space-y-2.5 text-zinc-500 dark:text-zinc-400">
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-brands fa-js text-yellow-400 w-4 text-sm"></i> JavaScript (ES6+)
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-brands fa-react text-cyan-400 w-4 text-sm"></i> React
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-wind text-teal-500 w-4 text-sm"></i> Tailwind CSS
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <i class="fa-brands fa-html5 text-orange-500 w-4 text-sm"></i> HTML5 / Semantics
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Experience ─────────────────────────────────── -->
+    <section id="experience" class="py-24 px-6 bg-white dark:bg-zinc-900 border-y border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-5xl mx-auto">
+            <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3 fade-in">Experience</p>
+            <h2 class="text-2xl font-semibold tracking-tight mb-14 fade-in">Where I've Worked</h2>
+
+            <div class="relative">
+                <!-- Timeline line -->
+                <div class="hidden md:block absolute left-[3px] top-2 bottom-8 w-px bg-zinc-200 dark:bg-zinc-800"></div>
+
+                <div class="space-y-10">
+                    <!-- Role 1 -->
+                    <div class="md:pl-10 relative fade-in">
+                        <div class="hidden md:block absolute left-0 top-[6px] w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 ring-4 ring-white dark:ring-zinc-900"></div>
+                        <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 mb-1">
+                            <h3 class="font-semibold text-zinc-900 dark:text-zinc-100">Software Engineer</h3>
+                            <span class="text-xs font-medium text-zinc-400 dark:text-zinc-500">2024 — Present</span>
+                        </div>
+                        <p class="text-sm font-medium text-blue-600 dark:text-blue-400 mb-3">Company Name</p>
+                        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-xl mb-4">
+                            Building and maintaining full-stack web applications. Focused on backend architecture, API design, and performance optimization.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">Node.js</span>
+                            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">PostgreSQL</span>
+                            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">React</span>
+                        </div>
+                    </div>
+
+                    <!-- Role 2 -->
+                    <div class="md:pl-10 relative fade-in delay-1">
+                        <div class="hidden md:block absolute left-0 top-[6px] w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700 ring-4 ring-white dark:ring-zinc-900"></div>
+                        <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 mb-1">
+                            <h3 class="font-semibold text-zinc-900 dark:text-zinc-100">Junior Developer</h3>
+                            <span class="text-xs font-medium text-zinc-400 dark:text-zinc-500">2023 — 2024</span>
+                        </div>
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-3">Company Name</p>
+                        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-xl mb-4">
+                            Contributed to frontend development, implemented RESTful APIs, and collaborated with design teams to build responsive interfaces.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">JavaScript</span>
+                            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">Express</span>
+                            <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">CSS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Projects ───────────────────────────────────── -->
+    <section id="projects" class="py-24 px-6">
+        <div class="max-w-5xl mx-auto">
+            <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3 fade-in">Work</p>
+            <div class="flex justify-between items-end mb-12 fade-in">
+                <div>
+                    <h2 class="text-2xl font-semibold tracking-tight mb-1">Selected Projects</h2>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400">Recent builds and technical experiments.</p>
+                </div>
+                <a href="#" class="hidden sm:flex items-center gap-1.5 text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    All on GitHub <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+            </div>
+
+            <!-- Featured project -->
+            <a href="#"
+                class="group block p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-blue-400/50 dark:hover:border-blue-500/30 hover:shadow-xl dark:hover:shadow-zinc-900/60 transition-all duration-300 mb-5 fade-in">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950 border border-blue-100 dark:border-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900">
+                            Featured
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3 text-zinc-300 dark:text-zinc-700">
+                        <i class="fa-brands fa-github text-lg group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors"></i>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover:text-blue-500 transition-colors"></i>
+                    </div>
+                </div>
+                <h3 class="font-semibold text-xl text-zinc-900 dark:text-zinc-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    Book Notes Protocol
+                </h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6 max-w-2xl">
+                    A full-stack architecture for logging and parsing technical reading materials. Features an expressive data model built on PostgreSQL, a RESTful Express API, and a clean server-rendered interface.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">Node.js</span>
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">PostgreSQL</span>
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">Express</span>
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">Tailwind CSS</span>
+                </div>
+            </a>
+
+            <!-- Project grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Project 2 -->
+                <a href="#"
+                    class="group block p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-blue-400/50 dark:hover:border-blue-500/30 hover:shadow-md transition-all duration-300 fade-in delay-1">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            <i class="fa-solid fa-earth-americas"></i>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-zinc-300 dark:text-zinc-700 group-hover:text-blue-500 transition-colors"></i>
+                    </div>
+                    <h3 class="font-medium text-zinc-900 dark:text-zinc-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        Global Tracker
+                    </h3>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-5">
+                        Interactive geospatial tracking application for plotting and managing high-density geographical datasets.
+                    </p>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="text-xs text-zinc-400 dark:text-zinc-600">React</span>
+                        <span class="text-xs text-zinc-300 dark:text-zinc-700">·</span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-600">API Design</span>
+                        <span class="text-xs text-zinc-300 dark:text-zinc-700">·</span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-600">CSS</span>
+                    </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="#"
+                    class="group block p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-blue-400/50 dark:hover:border-blue-500/30 hover:shadow-md transition-all duration-300 fade-in delay-2">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center text-zinc-500 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-zinc-300 dark:text-zinc-700 group-hover:text-blue-500 transition-colors"></i>
+                    </div>
+                    <h3 class="font-medium text-zinc-900 dark:text-zinc-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        Secrets Platform
+                    </h3>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-5">
+                        Anonymous secret-sharing platform with OAuth 2.0 authentication, encrypted sessions, and layered Passport.js strategies.
+                    </p>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="text-xs text-zinc-400 dark:text-zinc-600">Passport.js</span>
+                        <span class="text-xs text-zinc-300 dark:text-zinc-700">·</span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-600">OAuth 2.0</span>
+                        <span class="text-xs text-zinc-300 dark:text-zinc-700">·</span>
+                        <span class="text-xs text-zinc-400 dark:text-zinc-600">PostgreSQL</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Writing ─────────────────────────────────────── -->
+    <section id="writing" class="py-24 px-6 bg-white dark:bg-zinc-900 border-y border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-3xl mx-auto">
+            <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3 fade-in">Writing</p>
+            <h2 class="text-2xl font-semibold tracking-tight mb-10 fade-in">Thoughts & Notes</h2>
+
+            <div class="fade-in">
+                <a href="#" class="group flex flex-col sm:flex-row sm:items-baseline justify-between py-5 border-b border-zinc-100 dark:border-zinc-800 hover:border-blue-400/50 transition-colors">
+                    <h3 class="font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        The elegance of pure HTML and CSS
+                    </h3>
+                    <div class="flex items-center gap-4 mt-1 sm:mt-0 shrink-0">
+                        <span class="text-sm text-zinc-400">Oct 24, 2024</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] text-zinc-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                </a>
+
+                <a href="#" class="group flex flex-col sm:flex-row sm:items-baseline justify-between py-5 border-b border-zinc-100 dark:border-zinc-800 hover:border-blue-400/50 transition-colors">
+                    <h3 class="font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        Structuring Postgres databases for scale
+                    </h3>
+                    <div class="flex items-center gap-4 mt-1 sm:mt-0 shrink-0">
+                        <span class="text-sm text-zinc-400">Oct 12, 2024</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] text-zinc-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                </a>
+
+                <a href="#" class="group flex flex-col sm:flex-row sm:items-baseline justify-between py-5 border-b border-zinc-100 dark:border-zinc-800 hover:border-blue-400/50 transition-colors">
+                    <h3 class="font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        Why I write code like I'll forget it tomorrow
+                    </h3>
+                    <div class="flex items-center gap-4 mt-1 sm:mt-0 shrink-0">
+                        <span class="text-sm text-zinc-400">Sep 8, 2024</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] text-zinc-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Contact / Footer ───────────────────────────── -->
+    <footer id="contact" class="py-28 px-6">
+        <div class="max-w-2xl mx-auto text-center fade-in">
+            <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-4">Contact</p>
+            <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-5">
+                Let's build something<br>together.
+            </h2>
+            <p class="text-zinc-500 dark:text-zinc-400 mb-10 max-w-sm mx-auto text-sm leading-relaxed">
+                Whether you have a project in mind, an opportunity to share, or just want to say hi — I'd love to hear from you.
+            </p>
+
+            <a href="mailto:calvin@example.com"
+                class="inline-flex items-center gap-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-8 py-4 rounded-xl font-medium text-sm hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors shadow-sm mb-12">
+                <i class="fa-solid fa-envelope"></i>
+                calvin@example.com
+            </a>
+
+            <div class="flex justify-center gap-8 text-sm text-zinc-400 dark:text-zinc-500 mb-20">
+                <a href="#" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <a href="#" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors flex items-center gap-2">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="#" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors flex items-center gap-2">
+                    <i class="fa-brands fa-x-twitter"></i> Twitter
+                </a>
+            </div>
+
+            <div class="pt-8 border-t border-zinc-200 dark:border-zinc-800 text-xs text-zinc-400 dark:text-zinc-600">
+                Designed & built by Calvin Deka &copy; 2026
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ── Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progress-bar').style.width = pct + '%';
+        });
+
+        // ── Dark mode toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // ── Mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+
+        hamburger.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            hamburgerIcon.className = isHidden
+                ? 'fa-solid fa-bars text-sm'
+                : 'fa-solid fa-xmark text-sm';
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            hamburgerIcon.className = 'fa-solid fa-bars text-sm';
+        }
+
+        // ── Scroll-triggered fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Trigger hero elements on load (already in viewport)
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('section:first-of-type .fade-in').forEach(el => {
+                setTimeout(() => el.classList.add('visible'), 80);
+            });
+        });
+    </script>
+
+</body>
+</html>

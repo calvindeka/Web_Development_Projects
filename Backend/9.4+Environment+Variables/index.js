@@ -2,25 +2,23 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import bcrypt from "bcrypt";
-import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
-import dotenv from "dotenv";
-
-dotenv.config();
+import session from "express-session";
+import env from "dotenv";
 
 const app = express();
 const port = 3000;
 const saltRounds = 10;
+env.config();
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: "TOPSECRETWORD",
     resave: false,
     saveUninitialized: true,
   })
 );
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
@@ -28,11 +26,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const db = new pg.Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: "postgres",
+  host: "localhost",
+  database: "secrets",
+  password: "123456",
+  port: 5432,
 });
 db.connect();
 
@@ -58,6 +56,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/secrets", (req, res) => {
+  // console.log(req.user);
   if (req.isAuthenticated()) {
     res.render("secrets.ejs");
   } else {
@@ -83,7 +82,7 @@ app.post("/register", async (req, res) => {
     ]);
 
     if (checkResult.rows.length > 0) {
-      res.redirect("/login");
+      req.redirect("/login");
     } else {
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
@@ -109,7 +108,7 @@ app.post("/register", async (req, res) => {
 passport.use(
   new Strategy(async function verify(username, password, cb) {
     try {
-      const result = await db.query("SELECT * FROM users WHERE email = $1", [
+      const result = await db.query("SELECT * FROM users WHERE email = $1 ", [
         username,
       ]);
       if (result.rows.length > 0) {
@@ -117,12 +116,15 @@ passport.use(
         const storedHashedPassword = user.password;
         bcrypt.compare(password, storedHashedPassword, (err, valid) => {
           if (err) {
+            //Error with password check
             console.error("Error comparing passwords:", err);
             return cb(err);
           } else {
             if (valid) {
+              //Passed password check
               return cb(null, user);
             } else {
+              //Did not pass password check
               return cb(null, false);
             }
           }
@@ -139,7 +141,6 @@ passport.use(
 passport.serializeUser((user, cb) => {
   cb(null, user);
 });
-
 passport.deserializeUser((user, cb) => {
   cb(null, user);
 });

@@ -13,3 +13,6 @@
 
 # Node (in case you use it later)
 node_modules/
+
+# Environment Variables
+.env
